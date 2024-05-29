@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Traffic Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        #result {
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Traffic Prediction</h1>
+    <form id="predictionForm">
+        <label for="Date">Date:</label>
+        <input type="text" id="Date" name="Date">
+
+        <label for="Day of the week">Day of the week:</label>
+        <input type="text" id="Day of the week" name="Day of the week">
+
+        <label for="CarCount">CarCount:</label>
+        <input type="text" id="CarCount" name="CarCount">
+
+        <label for="BikeCount">BikeCount:</label>
+        <input type="text" id="BikeCount" name="BikeCount">
+
+        <label for="BusCount">BusCount:</label>
+        <input type="text" id="BusCount" name="BusCount">
+
+        <label for="TruckCount">TruckCount:</label>
+        <input type="text" id="TruckCount" name="TruckCount">
+
+        <label for="Total">Total:</label>
+        <input type="text" id="Total" name="Total">
+
+        <label for="hour">hour:</label>
+        <input type="text" id="hour" name="hour">
+
+        <label for="minute">minute:</label>
+        <input type="text" id="minute" name="minute">
+
+        <label for="AM/PM">AM/PM :</label>
+        <input type="text" id="AM/PM" name="AM/PM">
+
+        <input type="submit" value="Predict">
+    </form>
+    <p id="result"></p>
+    <script>
+        document.getElementById('predictionForm').onsubmit = async (event) => {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const json = JSON.stringify(Object.fromEntries(formData));
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: json
+            });
+            const result = await response.json();
+            document.getElementById('result').innerText = result.prediction ? `Prediction: ${result.prediction}` : `Error: ${result.error}`;
+        };
+    </script>
+</body>
+</html>
+
